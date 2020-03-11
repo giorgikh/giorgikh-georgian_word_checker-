@@ -5,6 +5,7 @@
 # import MySQLdb
 import pymysql
 import argparse
+import re
 
 
 server = "localhost"
@@ -38,13 +39,26 @@ def connect_and_fetch_data_db(query):
     return data
 
 
+def filter_input_text(text):
+    # filtered_input_word_list = text.split(" ", "?", ",", "!")
+    # print(filtered_input_word_list)
+    input_words_list = re.sub(r'[.!@$%%^&*(),;?]', ' ', text).split()
+    print(input_words_list)
+
+
 def check_words(data):
+
     for alphabet in data:
         words = alphabet["word_geo"]
-        for word in words:
-            # მიღებული გვაქვს სიტყვის თითოეული ასო
-            print(word)
+        # for word in words:
+        #     for input_word in text:
+        #         if (word == input_word):
+        #             print(word)
+        # მიღებული გვაქვს სიტყვის თითოეული ასო
+        # print(word)
+        print(words)
 
 
 if __name__ == "__main__":
-    check_words(connect_and_fetch_data_db(query))
+    filter_input_text(text)
+    # check_words(connect_and_fetch_data_db(query))
