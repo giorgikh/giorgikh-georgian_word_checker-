@@ -18,7 +18,7 @@ server = "localhost"
 user_name = "projectUser"
 password = "projectUser!@3"
 db_name = "Georgian_Words"
-query = "select * from correct_words limit 50"
+query = "select * from correct_words"
 symbol_list = [",", ".", "?", "!", ":", ";", r'"']
 
 
@@ -58,22 +58,28 @@ def generate_correct_sentence():
 
 
 def check_words(data):
+    correect_word_index = list()
     for index, alphabet in enumerate(data):
+        incorrect_alphabet = 1
         alphabet_status = False
         word = alphabet["word_geo"]
-        for input_word in input_words_list:
-            incorrect_alphabet = 0
+        for input_index, input_word in enumerate(input_words_list):
             if (input_word == word):
-                print("correect words : {}".format(input_word))
+                input_words_list[input_index] = word
+                correect_word_index.append(input_index)
+                print("==================================================correect words : {}".format(input_word))
+                continue
+            if input_index in correect_word_index:
                 continue
             else:
                 for i in range(len(input_word) - 1):
                     # print("")[1:5]
                     # ერთმანეთს დარდება ბაზაშI არსებული და პროგრამისთვის მინიჭებული სიტყვების ზომა
                     # თუ ბაზაშია რსბეული სიტყვის ზომა ნაკლებია მიწოდებულზე მაშინ  შემოწმებას აღარ გაივლის
-                    if (len(word) < len(input_word) - 1):
-                        print("incorrect word")
-                        print("==========")
+                    if (word == input_word):
+                        break
+                    if ((len(word) < len(input_word)) or (len(word) > len(input_word) + 1)):
+                        print("==========incorrect word")
                         break
                     # print(word, "44444444" + input_word)
                     # როდესაც სიტყვაში არსებული ასოები ერთმანეთს დაემთხვევა
@@ -82,23 +88,49 @@ def check_words(data):
                     # მოწმდება ინდექსი არის თუ არა სიტყვის ბოლო ასოზე
                     # კაცმა არ იცის აქ რახდება :D LMAO
                     elif (i != (len(input_word) - 1) and i != len(word) - 1):
-                        print("range")
-                        if ((input_word[i + 1] == word[i + 1]) and incorrect_alphabet <= 2):
-                            print("gaagrdzelos cikli ")
-                            continue
-                            alphabet_status = True
+                        print("range", i)
+                        incorrect_alphabet += 1
+                        if ((input_word[i] == word[i + 1]) and incorrect_alphabet <= 2):
+                            # აქ ციკლის გაგრძელება არ უნდა მოხდეს რადგან შემდეგ ციკლზე ინდექსი გაიზრდება
+                            # და შეტანილი სიტყვის ასოც შეიცვლება
+                            index_for_word = i
+                            print("index_for_word", index_for_word)
+                            print(word)
+                            print(input_word)
+                            # print(len(word) - i)
+
+                            for k in range(i, len(input_word) - i):
+                                print("k=", k)
+                                print("index = :", index_for_word)
+                                if(k != len(word) - 1):
+                                    ind = k + 1
+                                    print("if-ind", ind)
+                                    print("if-index", index_for_word)
+                                    print("99999999999999", incorrect_alphabet)
+                                if (input_word[index_for_word] != word[ind]):
+                                    incorrect_alphabet += 1
+                                    print("99999999999999", incorrect_alphabet)
+                                index_for_word += 1
+
+                            if(incorrect_alphabet <= 2):
+                                input_words_list[input_index] = word
+                                correect_word_index.append(input_index)
+                                print("sworiii")
+
+                            print("!!!!!!!!!!!!!!incorrect word  ")
+                            break
                     else:
                         alphabet_status = False
                         incorrect_alphabet += 1
-                    if(incorrect_alphabet == 1):
-                        input_words_list[i] = word
-                    if(not alphabet_status):
-                        if (input_word[1:len(input_word)] == word[1:len(input_word)]):
-                            input_words_list[i] = word
-
-        # მიღებული გვაქვს სიტყვის თითოეული ასო
-        # print(word)
-        # print(words)
+                        print(incorrect_alphabet)
+                        if((incorrect_alphabet == 1) and (i == len(input_word) - 1)):
+                            print(input_word, word + " --------------------------11111")
+                            input_words_list[input_index] = word
+                        if(not alphabet_status):
+                            if (input_word[1:len(input_word)] == word[1:len(input_word)]):
+                                print(input_word, word + " -----------------------------------bolo if")
+                                input_words_list[input_index] = word
+    print(input_words_list)
 
 
 if __name__ == "__main__":
