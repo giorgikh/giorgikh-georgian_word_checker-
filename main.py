@@ -8,10 +8,7 @@ import argparse
 import re
 
 """
-
-მოსაფიქრებელია სიტყვების შედარებას როგორ მოვახდენთ.
-როდესაც მიწოდებულ ტექსტიდან ამოვიღებთ სიტყვებს და ჩავსვავთ ლისტში შემდეგ
-როგორ შევადგენთ წინადადებებს შესწორებული სიტყვებით
+პროგრამა ახდენს სიტყვების შემოწმებასა და მის ჩასწორებას
 """
 
 server = "localhost"
@@ -40,10 +37,7 @@ def connect_and_fetch_data_db(query):
 
     cr = db.cursor()
     cr.execute(query)
-    # need to fix, fetch tuple type but we need dictionary
     data = cr.fetchall()
-    # print(type(data))
-    # print(data)
     db.close()
     return data
 
@@ -94,10 +88,6 @@ def check_words(data):
                             # აქ ციკლის გაგრძელება არ უნდა მოხდეს რადგან შემდეგ ციკლზე ინდექსი გაიზრდება
                             # და შეტანილი სიტყვის ასოც შეიცვლება
                             index_for_word = i
-                            print("index_for_word", index_for_word)
-                            print(word)
-                            print(input_word)
-                            # print(len(word) - i)
 
                             for k in range(i, len(input_word) - i):
                                 print("k=", k)
@@ -122,13 +112,10 @@ def check_words(data):
                     else:
                         alphabet_status = False
                         incorrect_alphabet += 1
-                        print(incorrect_alphabet)
                         if((incorrect_alphabet == 1) and (i == len(input_word) - 1)):
-                            print(input_word, word + " --------------------------11111")
                             input_words_list[input_index] = word
                         if(not alphabet_status):
                             if (input_word[1:len(input_word)] == word[1:len(input_word)]):
-                                print(input_word, word + " -----------------------------------bolo if")
                                 input_words_list[input_index] = word
     print(input_words_list)
 
