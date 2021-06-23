@@ -1,1 +1,1 @@
-# giorgikh-georgian_word_checker-
+word_checker
